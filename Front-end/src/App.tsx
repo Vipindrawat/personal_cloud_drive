@@ -1,12 +1,20 @@
+import { Routes, Route } from "react-router-dom"
+import Auth from "./Components/Authentication/Auth"
+import Signin from "./Components/Authentication/Signin"
+import Signup from "./Components/Authentication/Signup";
 
 
 function App() {
 
   return (
     <>
-      <h1 className="font-bold text-6xl text-center">this is a react application</h1>
+      <Auth />
+      <Routes>
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
     </>
   )
 }
 
-export default App
+export default App;

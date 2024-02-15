@@ -2,6 +2,7 @@
 module.exports = {
   darkMode: ["class"],
   content: [
+    './index.html',
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
@@ -17,6 +18,10 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        'Guerrilla': ['Protest Guerrilla', 'ui-sans-serif', 'system-ui'],
+        'Josefin': ['Josefin Sans', 'ui-sans-serif', 'system-ui'],
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
