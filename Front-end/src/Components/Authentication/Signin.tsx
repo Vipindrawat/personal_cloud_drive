@@ -52,9 +52,6 @@ const Signin = () => {
 
         <div className="w-full h-[100vh] flex justify-center items-center absolute top-0 z-10">
             <div className="2xl:w-[62.5%] xl:w-9/12 lg:w-10/12 w-[94%]2xl:min-h-[38rem] lg:min-h-[35rem] md:min-h-[30rem] sm:min-h-[27rem] min-h-[32rem] flex flex-row rounded-2xl ">
-                {/* 2xl:min-h-[38rem] lg:min-h-[35rem] md:min-h-[30rem] sm:min-h-[27rem] min-h-[32rem] */}
-                {/* lg:min-h-[38rem] md:min-h-[30rem] sm:min-h-[27rem] min-h-[32rem] */}
-                {/* 2xl:mt-[9.5rem] xl:mt-28 sm:mt-14 mt-20 */}
                 <div className="w-1/2 sm:block hidden">
                 </div>
                 <form onSubmit={formsubmit} className="sm:w-1/2 w-full flex flex-col items-center ">

@@ -3,6 +3,8 @@ import Young from "./young.jpg"
 
 const Auth = () => {
     const location = useLocation();
+
+    
     return (
         <div className="w-full h-[100vh] flex justify-center items-center z-0 ">
             <div className="2xl:w-[62.5%] xl:w-9/12 lg:w-10/12 w-[94%] 2xl:min-h-[38rem] lg:min-h-[35rem] md:min-h-[30rem] sm:min-h-[27rem] min-h-[32rem] flex flex-row bg-white rounded-2xl  ">
