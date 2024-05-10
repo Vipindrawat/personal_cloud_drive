@@ -3,7 +3,8 @@ import { FaUserTie } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { MdVisibility } from "react-icons/md";
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
+import { MdVisibilityOff } from "react-icons/md";
 
 const Signup = () => {
     const [signup_visibility, setsignup_visibility] = useState<{ password_visibility: string, cpassword_visibility: string }>({ password_visibility: "password", cpassword_visibility: "password" });
@@ -37,19 +38,22 @@ const Signup = () => {
         }
     }
 
+    const passwardRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
     const password_handler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(passwardRegex);
         setsignup_cred({ ...signup_cred, signup_password: e.target.value });
         if (signup_cred.signup_name.length == 0 && signup_cred.signup_email.length == 0) {
-            setsignup_validation({ ...signup_validation, name_validation: e.target.value ? "Name is a required field" : "", email_validation: e.target.value ? "Email is a required field" : "", password_validation: e.target.value && e.target.value.length < 5 ? "Password must be atleast 5 digits" : "" });
+            setsignup_validation({ ...signup_validation, name_validation: e.target.value ? "Name is a required field" : "", email_validation: e.target.value ? "Email is a required field" : "", password_validation: e.target.value && !passwardRegex.test(e.target.value) ? "Min-requirement:7+ digit,1 char,1 num,and 1 symbol" : "" });
         }
         else if (signup_cred.signup_name.length == 0) {
-            setsignup_validation({ ...signup_validation, name_validation: e.target.value ? "Name is a required field" : "", password_validation: e.target.value && e.target.value.length < 5 ? "Password must be atleast 5 digits" : "" });
+            setsignup_validation({ ...signup_validation, name_validation: e.target.value ? "Name is a required field" : "", password_validation: e.target.value && !passwardRegex.test(e.target.value) ? "Min-requirement:7+ digit,1 char,1 num,and 1 symbol" : "" });
         }
         else if (signup_cred.signup_email.length == 0) {
-            setsignup_validation({ ...signup_validation, email_validation: e.target.value ? "Email is a required field" : "", password_validation: e.target.value && e.target.value.length < 5 ? "Password must be atleast 5 digits" : "" });
+            setsignup_validation({ ...signup_validation, email_validation: e.target.value ? "Email is a required field" : "", password_validation: e.target.value && !passwardRegex.test(e.target.value) ? "Min-requirement:7+ digit,1 char,1 num,and 1 symbol" : "" });
         }
         else {
-            setsignup_validation({ ...signup_validation, password_validation: e.target.value && e.target.value.length < 5 ? "Password must be atleast 5 digits" : "" });
+            setsignup_validation({ ...signup_validation, password_validation: e.target.value && !passwardRegex.test(e.target.value) ? "Min-requirement:7+ digit,1 char,1 num,and 1 symbol" : "" });
         }
     }
 
@@ -77,14 +81,14 @@ const Signup = () => {
                 </div>
                 <form onSubmit={signup_submit} className="sm:w-1/2 w-full flex flex-col items-center ">
 
-                    <div className="flex flex-col 2xl:mt-56 lg:mt-48 md:mt-40 sm:mt-36 mt-48 lg:w-4/6 sm:w-9/12 w-5/6">
+                    <div className="flex flex-col 2xl:mt-56 lg:mt-48 md:mt-40 sm:mt-36 mt-48 xl:w-4/6 lg:w-9/12 md:w-[76%] sm:w-11/12 w-5/6">
                         {/* br tag is block level element and span is a inline element so br cannnot be used inside the span element */}
 
                         <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm mx-auto"></div>
 
                         <span className="relative 2xl:mb-1.5 md:mt-2 md:mb-1 sm:mt-1 mb-0.5">
                             <label htmlFor="signup_name" className="absolute lg:text-xl hover:cursor-pointer" ><FaUserTie /></label>
-                            <input className="focus:outline-none border-b-2 border-gray-300 lg:px-11 px-7 w-full lg:text-base text-sm font-Josefin" placeholder="Your name" id="signup_name" type="text" required minLength={3} value={signup_cred.signup_name} onChange={name_handler} />
+                            <input className="focus:outline-none border-b-2 border-gray-300 lg:px-11 px-7 w-full lg:text-base text-sm font-Josefin" placeholder="Your name" id="signup_name" type="text" required minLength={3} maxLength={24} value={signup_cred.signup_name} onChange={name_handler} />
                         </span>
 
                         <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm xl:ml-6 sm:ml-3 ml-6 lg:mb-2 sm:mb-0 mb-1">{signup_validation.name_validation}</div>
@@ -98,16 +102,18 @@ const Signup = () => {
 
                         <span className="relative 2xl:my-1.5 md:my-1 sm:my-0.5 my-1">
                             <label htmlFor="signup_password" className="absolute lg:text-lg text-sm hover:cursor-pointer"><FaLock /></label>
-                            <MdVisibility className="absolute right-1 lg:text-xl hover:cursor-pointer" name="signup_passcode" onClick={password_visibility_handler} />
-                            <input className="focus:outline-none border-b-2 border-gray-300 lg:px-11 px-7 w-full lg:text-base text-sm font-Josefin" placeholder="Password" type={signup_visibility.password_visibility} name="signup_password" id="signup_password" required minLength={5} value={signup_cred.signup_password} onChange={password_handler} />
+                            <MdVisibility className={`absolute right-1 lg:text-xl hover:cursor-pointer ${signup_visibility.password_visibility == "password" ? "" : "hidden"}`} name="signup_passcode" onClick={password_visibility_handler} />
+                            <MdVisibilityOff className={`absolute right-1 lg:text-xl hover:cursor-pointer ${signup_visibility.password_visibility == "password" ? "hidden" : ""}`} name="signup_passcode" onClick={password_visibility_handler} />
+                            <input className="focus:outline-none border-b-2 border-gray-300 lg:px-11 px-7 w-full lg:text-base text-sm font-Josefin" placeholder="Password" type={signup_visibility.password_visibility} name="signup_password" id="signup_password" required minLength={8} maxLength={24} value={signup_cred.signup_password} onChange={password_handler} />
                         </span>
 
-                        <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm xl:ml-6 sm:ml-3 ml-6 lg:mb-2 sm:mb-0 mb-1">{signup_validation.password_validation}</div>
+                        <div className={`text-red-500 h-5 font-Josefin lg:text-sm text-xs lg:mb-2 sm:mb-0 mb-1 ${signup_cred.signup_password.length == 0 ? "xl:ml-6 sm:ml-3 ml-6" : "xl:ml-0 sm:ml-0 ml-0"}`}>{signup_validation.password_validation}</div>
 
                         <span className="relative 2xl:my-1.5 md:my-1 sm:my-0.5 my-1">
                             <label htmlFor="signup_cpassword" className="absolute lg:text-lg text-sm hover:cursor-pointer"><FaLock /></label>
-                            <MdVisibility className="absolute right-1 lg:text-xl hover:cursor-pointer" name="cpassword_visibility" onClick={cpassword_visibility_handler} />
-                            <input className="focus:outline-none border-b-2 border-gray-300 lg:px-11 px-7 w-full lg:text-base text-sm font-Josefin" placeholder="Confirm Password" type={signup_visibility.cpassword_visibility} name="signup_cpassword" id="signup_cpassword" required minLength={5} value={signup_cred.signup_cpassword} onChange={cpassword_handler} />
+                            <MdVisibility className={`absolute right-1 lg:text-xl hover:cursor-pointer ${signup_visibility.cpassword_visibility == "password" ? "" : "hidden"}`} name="cpassword_visibility" onClick={cpassword_visibility_handler} />
+                            <MdVisibilityOff className={`absolute right-1 lg:text-xl hover:cursor-pointer ${signup_visibility.cpassword_visibility == "password" ? "hidden" : ""}`} name="cpassword_visibility" onClick={cpassword_visibility_handler} />
+                            <input className="focus:outline-none border-b-2 border-gray-300 lg:px-11 px-7 w-full lg:text-base text-sm font-Josefin" placeholder="Confirm Password" type={signup_visibility.cpassword_visibility} name="signup_cpassword" id="signup_cpassword" required minLength={8} maxLength={24} value={signup_cred.signup_cpassword} onChange={cpassword_handler} />
                         </span>
 
                         <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm xl:ml-6 sm:ml-3 ml-6 lg:mb-2 sm:mb-0 mb-1">{signup_validation.cpassword_validation}</div>
