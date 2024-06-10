@@ -3,10 +3,16 @@ import { FaUserTie } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
 import { MdVisibility } from "react-icons/md";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdVisibilityOff } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+
+    const host = "http://localhost:5000/api/register";
+    const navigate = useNavigate();
+    const [signup_servererror, setsignup_servererror] = useState<null | string>(null);
+
     const [signup_visibility, setsignup_visibility] = useState<{ password_visibility: string, cpassword_visibility: string }>({ password_visibility: "password", cpassword_visibility: "password" });
 
     const [signup_cred, setsignup_cred] = useState<{ signup_name: string, signup_email: string, signup_password: string, signup_cpassword: string }>({ signup_name: "", signup_email: "", signup_password: "", signup_cpassword: "" });
@@ -68,9 +74,32 @@ const Signup = () => {
     }
 
     // form submit event handler:
-    const signup_submit = (e: React.FormEvent<HTMLFormElement>) => {
+    const signup_submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const user_register = await fetch(`${host}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: signup_cred.signup_email, password: signup_cred.signup_password, name: signup_cred.signup_name })
+        })
+        const json = await user_register.json();
+        if (json.success == true) {
+            localStorage.setItem('token', json.token);
+            navigate("/");
+        }
+        else {
+            setsignup_servererror("Internal server error");
+            setsignup_cred({ signup_name: "", signup_email: "", signup_password: "", signup_cpassword: "" });
+        }
     }
+    useEffect(() => {
+        if (signup_servererror != null) {
+            setTimeout(() => {
+                setsignup_servererror(null);
+            }, 2000);
+        }
+    }, [signup_servererror])
 
     return (
 
@@ -79,12 +108,15 @@ const Signup = () => {
 
                 <div className="w-1/2 sm:block hidden">
                 </div>
+
                 <form onSubmit={signup_submit} className="sm:w-1/2 w-full flex flex-col items-center ">
+
+                    
 
                     <div className="flex flex-col 2xl:mt-56 lg:mt-48 md:mt-40 sm:mt-36 mt-48 xl:w-4/6 lg:w-9/12 md:w-[76%] sm:w-11/12 w-5/6">
                         {/* br tag is block level element and span is a inline element so br cannnot be used inside the span element */}
 
-                        <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm mx-auto"></div>
+                        <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm mx-auto">{signup_servererror}</div>
 
                         <span className="relative 2xl:mb-1.5 md:mt-2 md:mb-1 sm:mt-1 mb-0.5">
                             <label htmlFor="signup_name" className="absolute lg:text-xl hover:cursor-pointer" ><FaUserTie /></label>

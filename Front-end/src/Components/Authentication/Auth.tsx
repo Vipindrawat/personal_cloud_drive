@@ -19,9 +19,9 @@ const Auth = () => {
                     </div>
                     <div className="flex flex-row font-Josefin lg:text-xl text-lg md:py-7 py-5">
 
-                        <Link className={`md:px-11 px-8 py-2 z-20 font-bold rounded-md ${location.pathname == "/signup" ? "bg-gradient-to-r from-green-400 to-blue-500 text-white  hover:from-pink-500 hover:to-yellow-500" : "bg-white text-black hover:cursor-default"}`} to="/signin">Sign in</Link>
+                        <Link className={`md:px-11 px-8 py-2 z-20 font-bold rounded-md ${location.pathname == "/signup_otp" || location.pathname == "/signup_otp/credential" ? "bg-gradient-to-r from-green-400 to-blue-500 text-white  hover:from-pink-500 hover:to-yellow-500" : "bg-white text-black hover:cursor-default"}`} to="/signin">Sign in</Link>
 
-                        <Link className={`md:px-11 px-8 py-2 z-20 font-bold rounded-md ${location.pathname == "/signin" ? "bg-gradient-to-r from-green-400 to-blue-500 text-white  hover:from-pink-500 hover:to-yellow-500" : "bg-white text-black cursor-default"}`} to="/signup">Sign up</Link>
+                        <Link className={`md:px-11 px-8 py-2 z-20 font-bold rounded-md ${location.pathname == "/signin" ? "bg-gradient-to-r from-green-400 to-blue-500 text-white  hover:from-pink-500 hover:to-yellow-500" : "bg-white text-black cursor-default"}`} to="/signup_otp">Sign up</Link>
 
                     </div>
                 </div>
