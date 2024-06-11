@@ -7,14 +7,15 @@ interface mydata {
     directory: boolean,
     file: boolean,
     symlink: boolean,
-    name: string
+    name: string,
+
 }
 
 interface ResponseType {
-    "permission": boolean,
-    "exception": boolean,
-    "pathExists": boolean,
-    "content": mydata[]
+    permission: boolean,
+    exception: boolean,
+    pathExists: boolean,
+    content: mydata[]
 }
 interface InitialType {
     files: mydata[],
@@ -26,15 +27,16 @@ const initialState: InitialType = {
     status: null
 }
 
-
 // thunk function:
 export const fetch_files_fun = createAsyncThunk("aria/downloadFileServer", async () => {
     const token: string | null = localStorage.getItem('token');
     const response = await fetch("http://localhost:5000/api/fs/ls", {
-        method: "GET",
+        method: "POST",
         headers: {
-            "token": token as string
-        }
+            'Content-Type': "application/json",
+            "Authorization": token as string
+        },
+        body: JSON.stringify({ filepath: "/" })
     })
     const json = await response.json();
     return json;

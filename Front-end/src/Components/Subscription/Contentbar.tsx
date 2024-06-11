@@ -12,6 +12,7 @@ import File from './FileList'
 import History from './History'
 import { useAppDispatch, useAppSelector } from "@/app/Hook";
 import { fetch_files_fun } from "../../slice/Fetchfiles";
+import { changeState } from "@/slice/Videofiles";
 
 interface mydata {
     size: number,
@@ -49,98 +50,98 @@ interface getting_props {
 const Contentbar = (props: getting_props) => {
     const { downloadhistory, changestate } = props;
 
+    // const dispatch=useAppDispatch();
 
-    const host = "http://localhost:5000/api/fs/ls";
     const location = useLocation();
 
-    // // sample date of files:
-    // const data: mydata[] = [
-    //     {
-    //         "size": 51042,
-    //         "birthtime": "2024-04-02T18:35:59.987Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.1.html"
-    //     },
-    //     {
-    //         "size": 510489,
-    //         "birthtime": "2024-05-02T18:39:01.534Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "extaction_chi.html"
-    //     },
-    //     {
-    //         "size": 510789,
-    //         "birthtime": "2024-04-02T18:40:31.984Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "pirates_of_carbaian.html"
-    //     },
-    //     {
-    //         "size": 510423,
-    //         "birthtime": "2024-03-20T18:41:23.531Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.mp4"
-    //     },
-    //     {
-    //         "size": 510498,
-    //         "birthtime": "2024-03-02T18:42:37.529Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.mp3"
-    //     },
-    //     {
-    //         "size": 510445,
-    //         "birthtime": "2024-02-30T18:43:46.773Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.mp3"
-    //     },
-    //     {
-    //         "size": 51046,
-    //         "birthtime": "2024-05-24T18:55:10.468Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.png"
-    //     },
-    //     {
-    //         "size": 510400,
-    //         "birthtime": "2024-03-12T18:56:39.901Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.pdf"
-    //     }, {
-    //         "size": 510490,
-    //         "birthtime": "2024-01-12T18:56:39.901Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.ppt"
-    //     }, {
-    //         "size": 519900,
-    //         "birthtime": "2024-05-12T18:56:39.901Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.ppt"
-    //     }, {
-    //         "size": 510890,
-    //         "birthtime": "2024-06-12T18:56:39.901Z",
-    //         "directory": false,
-    //         "file": true,
-    //         "symlink": false,
-    //         "name": "index.zip"
-    //     }
-    // ]
+    // sample date of files:
+    const data: mydata[] = [
+        {
+            "size": 51042,
+            "birthtime": "2024-04-02T18:35:59.987Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.1.html"
+        },
+        {
+            "size": 510489,
+            "birthtime": "2024-05-02T18:39:01.534Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "extaction_chi.html"
+        },
+        {
+            "size": 510789,
+            "birthtime": "2024-04-02T18:40:31.984Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "pirates_of_carbaian.html"
+        },
+        {
+            "size": 510423,
+            "birthtime": "2024-03-20T18:41:23.531Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.mp4"
+        },
+        {
+            "size": 510498,
+            "birthtime": "2024-03-02T18:42:37.529Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.mp3"
+        },
+        {
+            "size": 510445,
+            "birthtime": "2024-02-30T18:43:46.773Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.mp3"
+        },
+        {
+            "size": 51046,
+            "birthtime": "2024-05-24T18:55:10.468Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.png"
+        },
+        {
+            "size": 510400,
+            "birthtime": "2024-03-12T18:56:39.901Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.pdf"
+        }, {
+            "size": 510490,
+            "birthtime": "2024-01-12T18:56:39.901Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.ppt"
+        }, {
+            "size": 519900,
+            "birthtime": "2024-05-12T18:56:39.901Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.ppt"
+        }, {
+            "size": 510890,
+            "birthtime": "2024-06-12T18:56:39.901Z",
+            "directory": false,
+            "file": true,
+            "symlink": false,
+            "name": "index.zip"
+        }
+    ]
     // inital data object for sizedata state variable:
     const sizedata: size = {
         videofilesize: 0,
@@ -163,6 +164,7 @@ const Contentbar = (props: getting_props) => {
     const [documentfiles, setdocumentfiles] = useState<mydata[]>([]);
     const [morefiles, setmorefiles] = useState<mydata[]>([]);
     const [filesize, setfilesize] = useState<size>(sizedata);
+
 
     const arra: { tag: string, img: React.ComponentType, size: number, file_no: number }[] = [
         {
@@ -203,8 +205,14 @@ const Contentbar = (props: getting_props) => {
     useEffect(() => {
         const videos: mydata[] = []; const audios: mydata[] = []; const images: mydata[] = []; const documents: mydata[] = []; const more: mydata[] = [];
         const sizeobj: size = { ...sizedata };
+        // const shallow = [...files].map(file => ({
+        //     ...file,
+        //     size: 0 // Replace 'newKey' and 'newValue' with your desired key and value
+        // }));
+
 
         const files_copy: myda[] = [];
+
 
         files.forEach((file) => {
             file.size = file.size / 1048576;
@@ -248,6 +256,7 @@ const Contentbar = (props: getting_props) => {
         setlatest_files(latest_arr);
 
         setvideofiles(videos);
+        dispatch(changeState(videos));
         setaudiofiles(audios);
         setimagefiles(images);
         setdocumentfiles(documents);

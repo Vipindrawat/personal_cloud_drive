@@ -4,7 +4,9 @@ import Rightbar from "./Rightbar";
 
 import Contentbar from "./Contentbar";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Routes, useNavigate, Route } from "react-router-dom";
+import Streamfile from "./Streamfile";
+import { useAppSelector } from "@/app/Hook";
 
 
 type UpdateStateFunction = (newState: boolean) => void;
@@ -18,10 +20,12 @@ const HomePage = () => {
     }
   }, [])
 
-  const [downloadhistory,setdownloadhistory]=useState<boolean>(false);
+  const [downloadhistory, setdownloadhistory] = useState<boolean>(false);
 
-  const changestate: UpdateStateFunction =(value:boolean)=>{
-setdownloadhistory(value);
+  const streamstate = useAppSelector((state) => state.Stream_slice)
+
+  const changestate: UpdateStateFunction = (value: boolean) => {
+    setdownloadhistory(value);
   }
   return (
     <div className='w-[100vw] h-[100vh] flex justify-center items-center overflow-hidden'>
@@ -40,7 +44,10 @@ setdownloadhistory(value);
           <div className="flex h-[94%] rounded-b-2xl ">
 
             <div className=" md:w-[70%] box-border w-full md:border-r-2 border-white flex justify-center items-center ">
-              <Contentbar downloadhistory={downloadhistory} changestate={changestate} />
+              <Routes>
+                <Route path="/Streamvideos" element={<Streamfile />}></Route>
+              </Routes>
+              {!streamstate && <Contentbar downloadhistory={downloadhistory} changestate={changestate} />}
             </div>
 
             <div className="w-[30%] md:flex items-center justify-center hidden">

@@ -23,7 +23,7 @@ const OtpInput = (props: propstype) => {
             if (timerRef.current) {
                 clearInterval(timerRef.current);
             }
-            setTimeLeft(30);
+            setTimeLeft(180);
             timerRef.current = setInterval(() => {
                 setTimeLeft((prevTime) => {
                     if (prevTime <= 1) {

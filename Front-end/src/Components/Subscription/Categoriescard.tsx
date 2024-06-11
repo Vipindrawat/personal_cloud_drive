@@ -13,7 +13,6 @@ interface propinterface {
 const Categoriescard = (props: propinterface) => {
     const { item } = props;
 
-
     return (
         <Link to={`/category/${item.tag}`} >
             <div className="inline-block xl:w-40 lg:w-[9.5rem] md:w-36 sm:w-32 w-36 overflow-hidden shadow-lg bg-white rounded-lg">

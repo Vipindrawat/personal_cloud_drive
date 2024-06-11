@@ -5,6 +5,11 @@ import { useState } from "react";
 import { useAppDispatch } from "@/app/Hook";
 import { upload_link } from "../../slice/Link_upload"
 import { fetch_files_fun } from "../../slice/Fetchfiles";
+import socket from "./Socket";
+import { changestate } from "@/slice/StatusUpdate";
+
+type ArrayOfObjects = Array<Record<string, any>>;
+
 
 const Rightbar = () => {
 
@@ -15,9 +20,10 @@ const Rightbar = () => {
     const [linkvalidation, setlinkvalidation] = useState<string | null>(null);
     const [disable, setdisable] = useState<boolean>(true);
 
-    const normalDownloadPattern = /https?:\/\/[^\s\/$.?#].[^\s]*\.(zip|exe|pdf|mp3|mp4|jpg|png|tar\.gz|rar|7z|iso|docx?|xlsx?|pptx?|txt|apk|dmg|bin|msi|deb|rpm|pkg)/gi;
-    const torrentFilePattern = /https?:\/\/[^\s\/$.?#].[^\s]*\.torrent/gi;
-    const magnetLinkPattern = /magnet:\?xt=urn:btih:[a-zA-Z0-9]{40,}/gi;
+    const normalDownloadPattern = /https?:\/\/[^\s\/$.?#].[^\s]*\/[^\s]*(download|\.zip|\.exe|\.pdf|\.mp3|\.mp4|\.jpg|\.jpeg|\.png|\.gif|\.tar\.gz|\.rar|\.7z|\.iso|\.docx?|\.xlsx?|\.pptx?|\.txt|\.apk|\.dmg|\.bin|\.msi|\.deb|\.rpm|\.pkg|\.avi|\.mov|\.wmv|\.flv|\.mkv|\.webm|\.ogg|\.wav|\.aac)(\?[^\s]*)?(?!.*\.torrent)/gi;
+
+
+    const torrentAndMagnetPattern = /(https?:\/\/[^\s\/$.?#].[^\s]*\/[^\s]*\.torrent(\?[^\s]*)?|magnet:\?xt=urn:btih:[a-zA-Z0-9]{40,}(\&[^\s]*)?)/gi;
 
     const onchange_fileinput = (event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -34,10 +40,13 @@ const Rightbar = () => {
     }
 
     const onchange_uriinput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const dispatch = useAppDispatch();
+
         seturi_state(e.target.value);
-        if (!normalDownloadPattern.test(e.target.value) && !torrentFilePattern.test(e.target.value) && !magnetLinkPattern.test(e.target.value) && e.target.value.length != 0) {
+        if (!normalDownloadPattern.test(e.target.value) && !torrentAndMagnetPattern.test(e.target.value) && e.target.value.length != 0) {
             setlinkvalidation("Invalid Link format");
             setdisable(true);
+            console.log("inside the if");
         }
         else if (e.target.value.length == 0) {
             setlinkvalidation(null);
@@ -85,12 +94,22 @@ const Rightbar = () => {
     const formsumbit_handler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (uri_state.length != 0) {
-            dispatch(upload_link(uri_state));
+            if (normalDownloadPattern.test(uri_state)) {
+                dispatch(upload_link(uri_state));
+                socket.on('statusUpdate', (value: ArrayOfObjects) => {
+                    const val = value[0];
+                    dispatch(changestate(val));
+                    if (value[0].totalLength == value[0].uploadLength) {
+                        dispatch(fetch_files_fun());
+                    }
+                })
+            }
+
         } else {
             inputFileUpload();
+            dispatch(fetch_files_fun());
         }
     };
-
 
     return (
         <div className="w-11/12 h-[96%] flex flex-col justify-between overflow-y-auto">

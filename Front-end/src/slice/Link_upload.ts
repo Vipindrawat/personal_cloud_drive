@@ -19,7 +19,6 @@ const initialState: InitialType = {
     status: null
 }
 
-
 // thunk function:
 export const upload_link = createAsyncThunk("aria/downloadFileServer", async (uri: string) => {
     console.log("upload_link function working");
@@ -38,6 +37,7 @@ const Linkupload_slice = createSlice({
     name: "link_upload",
     initialState,
     reducers: {
+        guiddelete:(state)=> initialState
     },
     extraReducers: (builder) => {
         builder.addCase(upload_link.pending, (state) => {
@@ -52,4 +52,5 @@ const Linkupload_slice = createSlice({
         })
     }
 })
+export const { guiddelete } = Linkupload_slice.actions
 export default Linkupload_slice.reducer;

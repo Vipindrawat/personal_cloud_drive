@@ -12,3 +12,12 @@
 progress::-webkit-progress-bar {
     border-radius: 9999px;
 }
+
+#file::-webkit-progress-bar {
+    border-radius: 0;
+}
+
+#file::-webkit-progress-value {
+    background-color: blue;
+
+}

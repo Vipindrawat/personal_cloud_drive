@@ -9,8 +9,9 @@ import { BiSolidFileHtml } from "react-icons/bi";
 import { FaFileZipper } from "react-icons/fa6";
 import { MdMore } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import { FiDownload } from "react-icons/fi";
-import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+import { FiDownload } from "react-icons/fi"
+import { FaPlay } from "react-icons/fa6";
+
 import {
     Menubar,
     MenubarContent,
@@ -20,6 +21,10 @@ import {
     MenubarShortcut,
     MenubarTrigger,
 } from "@/shadcn/ui/menubar"
+import { useAppDispatch } from '@/app/Hook';
+import { fetch_files_fun } from '@/slice/Fetchfiles';
+import { useNavigate } from 'react-router-dom';
+import { changestate } from '@/slice/StatusUpdate';
 
 
 interface mydata {
@@ -42,6 +47,8 @@ interface image {
 }
 
 const FileGrid = (props: myprops) => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const obj: image = {
         Videos: MdOndemandVideo,
@@ -86,6 +93,54 @@ const FileGrid = (props: myprops) => {
         }
     }, [file_type])
 
+    const Download_handler = async () => {
+        const token: string | null = localStorage.getItem('token');
+        const response = await fetch('http:/localhost:5000//api/fs/downloadFIleClient', {
+            headers: {
+                "Authorization": token as string,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ filePath: `/${fileobj.name}` })
+        })
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = fileobj.name;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } else {
+            console.error('Failed to download file');
+        }
+
+    }
+    const Deleteclick_handler = async () => {
+        const token: string | null = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/fs/delete', {
+            headers: {
+                "Authorization": token as string,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ filePath: `/${fileobj.name}` })
+        })
+        const json = await response.json();
+        if (json.deleted == true) {
+            dispatch(fetch_files_fun());
+        }
+    }
+
+    const clickplay = () => {
+        if (file_type == "Videos") {
+            const encodeURI = encodeURIComponent("/" + fileobj.name);
+            dispatch(changestate(encodeURI));
+            navigate("/Streamvideos");
+        }
+    }
+
+
     return (
 
         <div className="inline-block xl:w-40 lg:w-[9.5rem] md:w-36 sm:w-32 w-36 overflow-hidden shadow-lg bg-white rounded-lg">
@@ -99,12 +154,13 @@ const FileGrid = (props: myprops) => {
                         </MenubarTrigger>
                         <MenubarContent>
                             <MenubarItem>
-                                <FiDownload className='text-black mr-2' />   Download
+                                <button onClick={Download_handler} className='flex items-center'><FiDownload className='text-black mr-2' />  Download</button>
                             </MenubarItem>
                             <MenubarItem>
-                                <MdOutlineDriveFileRenameOutline className='text-black mr-2' />   Rename
-                            </MenubarItem> <MenubarItem>
-                                <MdDelete className='text-black mr-2' /> Delete
+                                <button onClick={Deleteclick_handler} className='flex items-center'> <MdDelete className='text-black mr-2' /> Delete</button>
+                            </MenubarItem>
+                            <MenubarItem className={`${file_type == "Videos" ? "" : "hidden"}`}>
+                                <button onClick={clickplay} className='flex items-center '><FaPlay className='text-black mr-2 ' /> Play</button>
                             </MenubarItem>
                         </MenubarContent>
                     </MenubarMenu>
