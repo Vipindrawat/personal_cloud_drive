@@ -17,8 +17,6 @@ import {
     MenubarContent,
     MenubarItem,
     MenubarMenu,
-    MenubarSeparator,
-    MenubarShortcut,
     MenubarTrigger,
 } from "@/shadcn/ui/menubar"
 import { useAppDispatch } from '@/app/Hook';
@@ -89,7 +87,6 @@ const FileGrid = (props: myprops) => {
         else {
             const value = () => obj[file_type];
             setIconSelected(value);
-            console.log("useeffect working");
         }
     }, [file_type])
 

@@ -36,7 +36,7 @@ export const fetch_files_fun = createAsyncThunk("aria/downloadFileServer", async
             'Content-Type': "application/json",
             "Authorization": token as string
         },
-        body: JSON.stringify({ filepath: "/" })
+        body: JSON.stringify({ targetPath: "/" })
     })
     const json = await response.json();
     return json;

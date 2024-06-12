@@ -5,10 +5,7 @@ import { useState } from "react";
 import { useAppDispatch } from "@/app/Hook";
 import { upload_link } from "../../slice/Link_upload"
 import { fetch_files_fun } from "../../slice/Fetchfiles";
-import socket from "./Socket";
-import { changestate } from "@/slice/StatusUpdate";
 
-type ArrayOfObjects = Array<Record<string, any>>;
 
 
 const Rightbar = () => {
@@ -28,7 +25,6 @@ const Rightbar = () => {
     const onchange_fileinput = (event: React.ChangeEvent<HTMLInputElement>) => {
 
         const selectedFile = event.target.files?.[0];
-        console.log(selectedFile?.size);
         if (selectedFile) {
             setfile_state(selectedFile);
             setdisable(false);
@@ -40,13 +36,12 @@ const Rightbar = () => {
     }
 
     const onchange_uriinput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const dispatch = useAppDispatch();
+        // const dispatch = useAppDispatch();
 
         seturi_state(e.target.value);
         if (!normalDownloadPattern.test(e.target.value) && !torrentAndMagnetPattern.test(e.target.value) && e.target.value.length != 0) {
             setlinkvalidation("Invalid Link format");
             setdisable(true);
-            console.log("inside the if");
         }
         else if (e.target.value.length == 0) {
             setlinkvalidation(null);
@@ -96,13 +91,13 @@ const Rightbar = () => {
         if (uri_state.length != 0) {
             if (normalDownloadPattern.test(uri_state)) {
                 dispatch(upload_link(uri_state));
-                socket.on('statusUpdate', (value: ArrayOfObjects) => {
-                    const val = value[0];
-                    dispatch(changestate(val));
-                    if (value[0].totalLength == value[0].uploadLength) {
-                        dispatch(fetch_files_fun());
-                    }
-                })
+                // socket.on('statusUpdate', (value: ArrayOfObjects) => {
+                //     const val = value[0];
+                //     dispatch(changestate(val));
+                //     if (value[0].totalLength == value[0].uploadLength) {
+                //         dispatch(fetch_files_fun());
+                //     }
+                // })
             }
 
         } else {

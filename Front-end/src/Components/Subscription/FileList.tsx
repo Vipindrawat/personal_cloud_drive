@@ -13,11 +13,8 @@ import {
     MenubarContent,
     MenubarItem,
     MenubarMenu,
-    MenubarSeparator,
-    MenubarShortcut,
     MenubarTrigger,
 } from "@/shadcn/ui/menubar"
-import { Download } from 'lucide-react';
 import { useAppDispatch } from '@/app/Hook';
 import { fetch_files_fun } from '@/slice/Fetchfiles';
 import { changestate } from '@/slice/Streamslice';
@@ -58,7 +55,6 @@ const FileList = (props: myprops) => {
     const { fileobj, file_type } = props;
     const [Selectedicon, setSelectedicon] = useState<IconComponentType | null>(null);
     useEffect(() => {
-        console.log(fileobj);
         const value = () => obj[file_type];
         setSelectedicon(value);
     }, [file_type])

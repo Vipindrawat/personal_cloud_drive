@@ -6,8 +6,6 @@ import {
     MenubarContent,
     MenubarItem,
     MenubarMenu,
-    MenubarSeparator,
-    MenubarShortcut,
     MenubarTrigger,
 } from "@/shadcn/ui/menubar"
 import { HiDotsVertical } from "react-icons/hi";
@@ -25,7 +23,6 @@ const History = (props: history_props) => {
     const { changestate, downloadhistory } = props;
 
     const back_handler = () => {
-        console.log("back_handler");
         changestate(false);
     }
     // file,uploadSpeed,totalLength,uploadLength

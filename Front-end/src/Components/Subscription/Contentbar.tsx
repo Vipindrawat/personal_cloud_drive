@@ -50,7 +50,7 @@ interface getting_props {
 const Contentbar = (props: getting_props) => {
     const { downloadhistory, changestate } = props;
 
-    // const dispatch=useAppDispatch();
+    const dispatch = useAppDispatch();
 
     const location = useLocation();
 
@@ -151,11 +151,11 @@ const Contentbar = (props: getting_props) => {
         morefilesize: 0,
     }
 
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
     const files = useAppSelector((state) => state.fetch_files.files)
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetch_files_fun());
-    },[])
+    }, [])
 
     // const [files, setfiles] = useState<mydata[]>(data);
     const [videofiles, setvideofiles] = useState<mydata[]>([]);
@@ -205,16 +205,12 @@ const Contentbar = (props: getting_props) => {
     useEffect(() => {
         const videos: mydata[] = []; const audios: mydata[] = []; const images: mydata[] = []; const documents: mydata[] = []; const more: mydata[] = [];
         const sizeobj: size = { ...sizedata };
-        // const shallow = [...files].map(file => ({
-        //     ...file,
-        //     size: 0 // Replace 'newKey' and 'newValue' with your desired key and value
-        // }));
-
-
         const files_copy: myda[] = [];
 
+        // files.forEach((file) => {
+        for (let i = 0; i < files.length; i++) {
+            const file = Object.assign({}, files[i]);
 
-        files.forEach((file) => {
             file.size = file.size / 1048576;
 
             if (file.name.endsWith(".mp4")) {
@@ -248,7 +244,8 @@ const Contentbar = (props: getting_props) => {
                 const file_copy: myda = { ...file, category: "More" };
                 files_copy.push(file_copy);
             }
-        })
+            // })
+        }
 
         files_copy.sort((a, b) => new Date(b.birthtime).getTime() - new Date(a.birthtime).getTime());
         setfiles_additional(files_copy);
